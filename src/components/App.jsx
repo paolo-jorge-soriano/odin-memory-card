@@ -3,31 +3,38 @@ import Card from "./Card";
 import "../styles/App.css";
 
 export default function App() {
-  const [pokemon, setPokemon] = useState([]);
+  const [pokemonArray, setPokemonArray] = useState([]);
   const [clicked, setClicked] = useState([]);
   const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
 
   // Get Pokemon Data
   const fetchPokemon = async () => {
-    const ids = [
-      ...new Set(
-        Array.from({ length: 6 }, () => Math.floor(Math.random() * 150) + 1)
-      ),
-    ];
-    const data = await Promise.all(
-      ids.map((id) =>
-        fetch(`https://pokeapi.co/api/v2/pokemon/${id}`).then((res) =>
-          res.json()
-        )
-      )
-    );
-    setPokemon(
-      data.map((p) => ({
-        id: p.id,
-        name: p.name,
-        image: p.sprites.front_default,
-      }))
-    );
+    try {
+      const ids = [
+        ...new Set(
+          Array.from({ length: 10 }, () => Math.floor(Math.random() * 150) + 1)
+        ),
+      ];
+
+      const responses = await Promise.all(
+        ids.map((id) => fetch(`https://pokeapi.co/api/v2/pokemon/${id}`))
+      );
+
+      const data = await Promise.all(
+        responses.map((response) => response.json())
+      );
+
+      setPokemonArray(
+        data.map((p) => ({
+          id: p.id,
+          name: p.name,
+          image: p.sprites.other.dream_world.front_default,
+        }))
+      );
+    } catch (error) {
+      console.error("Error fetching Pokemon Data: ", error);
+    }
   };
 
   useEffect(() => {
@@ -37,17 +44,22 @@ export default function App() {
   const handleClick = (id) => {
     if (clicked.includes(id)) {
       alert("Game Over!");
-      setClicked([]);
       setScore(0);
+      setClicked([]);
     } else {
+      const newScore = score + 1;
+      setScore(newScore);
       setClicked([...clicked, id]);
-      setScore(score + 1);
       shuffleCards();
+
+      if (newScore > highScore) {
+        setHighScore(newScore);
+      }
     }
   };
 
   const shuffleCards = () => {
-    setPokemon((prev) => [...prev].sort(() => Math.random() - 0.5));
+    setPokemonArray((prev) => [...prev].sort(() => Math.random() - 0.5));
   };
 
   return (
@@ -55,14 +67,15 @@ export default function App() {
       <div className="header">
         <h1>Pokemon Memory Game</h1>
         <h2>Score: {score}</h2>
+        <h2>High Score: {highScore}</h2>
       </div>
 
       <div className="grid">
-        {pokemon.map((poke) => (
+        {pokemonArray.map((pokemon) => (
           <Card
-            key={poke.id}
-            poke={poke}
-            onClick={() => handleClick(poke.id)}
+            key={pokemon.id}
+            pokemon={pokemon}
+            onClick={() => handleClick(pokemon.id)}
           />
         ))}
       </div>
