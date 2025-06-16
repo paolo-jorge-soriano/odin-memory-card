@@ -43,47 +43,30 @@ export default function App() {
     fetchPokemon();
   }, []);
 
-  // const handleClick = (id) => {
-  //   if (clicked.includes(id)) {
-  //     alert("Game Over!");
-  //     setScore(0);
-  //     setClicked([]);
-  //     shuffleCards();
-  //   } else {
-  //     const newScore = score + 1;
-  //     setScore(newScore);
-  //     setClicked([...clicked, id]);
-  //     shuffleCards();
-
-  //     if (newScore > highScore) {
-  //       setHighScore(newScore);
-  //     }
-  //   }
-  // };
-
   const handleClick = (id) => {
-    requestAnimationFrame(() => {
-      setIsFlipping(true);
+    setIsFlipping(true);
 
+    setTimeout(() => {
+      if (clicked.includes(id)) {
+        alert("Game Over!");
+        setScore(0);
+        setClicked([]);
+      } else {
+        const newScore = score + 1;
+        setScore(newScore);
+        setClicked([...clicked, id]);
+
+        if (newScore > highScore) {
+          setHighScore(newScore);
+        }
+      }
+      shuffleCards();
+
+      // ensures consistent animation when flipping cards back
       setTimeout(() => {
         setIsFlipping(false);
-
-        if (clicked.includes(id)) {
-          alert("Game Over!");
-          setScore(0);
-          setClicked([]);
-        } else {
-          const newScore = score + 1;
-          setScore(newScore);
-          setClicked([...clicked, id]);
-
-          if (newScore > highScore) {
-            setHighScore(newScore);
-          }
-        }
-        shuffleCards();
-      }, 800);
-    });
+      }, 400);
+    }, 600);
   };
 
   const shuffleCards = () => {
