@@ -1,10 +1,17 @@
+@font-face {
+  font-family: "Pokemon";
+  src: url("../assets/font/Pokemon-Solid.ttf");
+}
+
 .header-container {
   background-color: black;
   color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 10px;
+  z-index: 1;
 }
 
 .main-container {
-  background-color: aliceblue;
+  background-color: #f8f8f8;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,12 +31,23 @@
   align-items: center;
 }
 
+.project-logo {
+  cursor: pointer;
+  height: 80px;
+}
+
+.scoreboard {
+  font-size: 1.2rem;
+  letter-spacing: 0.1rem;
+  text-align: right;
+}
+
 .main {
   display: grid;
   justify-content: center;
   align-items: center;
   grid-template-columns: repeat(auto-fill, 200px);
-  gap: 3rem 2rem;
+  gap: 2rem;
   border: 2px solid pink;
   width: 100%;
 }
