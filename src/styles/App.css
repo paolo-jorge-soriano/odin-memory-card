@@ -1,1 +1,35 @@
+.header-container {
+  background-color: black;
+  color: white;
+}
 
+.main-container {
+  background-color: aliceblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.header,
+.main {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  grid-template-columns: repeat(auto-fill, 200px);
+  gap: 3rem 2rem;
+  border: 2px solid pink;
+  width: 100%;
+}

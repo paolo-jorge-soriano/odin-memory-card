@@ -4,12 +4,16 @@
   justify-content: center;
   align-items: center;
   border: 1px solid black;
-  width: 300px;
-  height: 400px;
-  padding: 20px;
+  border-radius: 10px;
+  height: 300px;
+  gap: 30px;
   cursor: pointer;
 }
 
-.card > img {
-  width: 200px;
+.card-image {
+  height: 100px;
+}
+
+.card-name {
+  font-size: 1.5rem;
 }

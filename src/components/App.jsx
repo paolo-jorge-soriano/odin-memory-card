@@ -44,6 +44,7 @@ export default function App() {
   const handleClick = (id) => {
     if (clicked.includes(id)) {
       alert("Game Over!");
+      shuffleCards();
       setScore(0);
       setClicked([]);
     } else {
@@ -64,20 +65,26 @@ export default function App() {
 
   return (
     <>
-      <div className="header">
-        <h1>Pokemon Memory Game</h1>
-        <h2>Score: {score}</h2>
-        <h2>High Score: {highScore}</h2>
+      <div className="header-container">
+        <header className="header">
+          <h1>PokeMemory</h1>
+          <div className="scoreboard">
+            <h3>Score: {score}</h3>
+            <h3>High Score: {highScore}</h3>
+          </div>
+        </header>
       </div>
 
-      <div className="grid">
-        {pokemonArray.map((pokemon) => (
-          <Card
-            key={pokemon.id}
-            pokemon={pokemon}
-            onClick={() => handleClick(pokemon.id)}
-          />
-        ))}
+      <div className="main-container">
+        <main className="main">
+          {pokemonArray.map((pokemon) => (
+            <Card
+              key={pokemon.id}
+              pokemon={pokemon}
+              onClick={() => handleClick(pokemon.id)}
+            />
+          ))}
+        </main>
       </div>
     </>
   );
