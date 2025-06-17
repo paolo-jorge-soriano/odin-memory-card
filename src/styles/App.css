@@ -48,6 +48,24 @@
   align-items: center;
   grid-template-columns: repeat(auto-fill, 200px);
   gap: 2rem;
-  border: 2px solid pink;
   width: 100%;
+}
+
+.btn-toggle-music {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+  z-index: 2;
+  bottom: 10px;
+  left: 10px;
+}
+
+.btn-toggle-music img {
+  height: 80%;
 }

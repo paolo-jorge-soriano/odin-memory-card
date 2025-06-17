@@ -23,6 +23,12 @@
   justify-content: center;
   align-items: center;
   background-color: #3c5aa6;
+  transition: 0.1s ease-in;
+}
+
+.card-front:hover {
+  outline: 3px solid #ffcb05;
+  transform: scale(1.05);
 }
 
 .card-front,

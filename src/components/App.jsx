@@ -1,7 +1,11 @@
-import { useState, useEffect } from "react";
-import Card from "./Card";
+import { useState, useEffect, useRef } from "react";
 import "../styles/App.css";
+import Card from "./Card";
 import projectLogo from "../assets/img/project-logo.png";
+import musicOn from "../assets/img/music-on.svg";
+import musicOff from "../assets/img/music-off.svg";
+import bgMusic from "../assets/sfx/bg-music.mp3";
+import cardFlipSfx from "../assets/sfx/card-flip-sfx.mp3";
 
 export default function App() {
   const [pokemonArray, setPokemonArray] = useState([]);
@@ -10,14 +14,54 @@ export default function App() {
   const [highScore, setHighScore] = useState(0);
   const [isFlipping, setIsFlipping] = useState(false);
 
-  // Get Pokemon Data
+  // BGM
+  const audioRef = useRef(null);
+  const [isMuted, setIsMuted] = useState(true);
+
+  // card flip sfx
+  const cardFlipSound = new Audio(cardFlipSfx);
+  cardFlipSound.volume = 0.3;
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.volume = 0.3;
+      audio.loop = true;
+      audio.muted = isMuted;
+
+      const playAudio = () => {
+        if (audio.paused) {
+          audio.play().catch((error) => {
+            console.warn("Autoplay failed:", error);
+          });
+        }
+      };
+
+      document.addEventListener("click", playAudio, { once: true });
+
+      return () => {
+        document.removeEventListener("click", playAudio);
+      };
+    }
+  }, [isMuted]);
+
+  const toggleMute = () => {
+    setIsMuted((prev) => !prev);
+  };
+
+  const getUniqueIds = (count, max = 150) => {
+    const ids = new Set();
+    while (ids.size < count) {
+      ids.add(Math.floor(Math.random() * max) + 1);
+    }
+
+    return Array.from(ids);
+  };
+
+  // get Pokemon Data
   const fetchPokemon = async () => {
     try {
-      const ids = [
-        ...new Set(
-          Array.from({ length: 10 }, () => Math.floor(Math.random() * 150) + 1)
-        ),
-      ];
+      const ids = getUniqueIds(10);
 
       const responses = await Promise.all(
         ids.map((id) => fetch(`https://pokeapi.co/api/v2/pokemon/${id}`))
@@ -44,6 +88,8 @@ export default function App() {
   }, []);
 
   const handleClick = (id) => {
+    cardFlipSound.play();
+
     setIsFlipping(true);
 
     setTimeout(() => {
@@ -96,6 +142,12 @@ export default function App() {
             />
           ))}
         </main>
+      </div>
+
+      <audio ref={audioRef} src={bgMusic} preload="auto" />
+
+      <div className="btn-toggle-music" onClick={toggleMute}>
+        {isMuted ? <img src={musicOff} /> : <img src={musicOn} />}
       </div>
     </>
   );
