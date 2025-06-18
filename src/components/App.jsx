@@ -4,8 +4,8 @@ import Card from "./Card";
 import projectLogo from "../assets/img/project-logo.png";
 import musicOn from "../assets/img/music-on.svg";
 import musicOff from "../assets/img/music-off.svg";
-import bgMusic from "../assets/sfx/bg-music.mp3";
-import cardFlipSfx from "../assets/sfx/card-flip-sfx.mp3";
+import bgm from "../assets/sfx/bgm.mp3";
+import cardFlipSfx from "../assets/sfx/card-flip.mp3";
 
 export default function App() {
   const [pokemonArray, setPokemonArray] = useState([]);
@@ -20,12 +20,12 @@ export default function App() {
 
   // card flip sfx
   const cardFlipSound = new Audio(cardFlipSfx);
-  cardFlipSound.volume = 0.3;
+  cardFlipSound.volume = 0.8;
 
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
-      audio.volume = 0.3;
+      audio.volume = 0.2;
       audio.loop = true;
       audio.muted = isMuted;
 
@@ -88,7 +88,9 @@ export default function App() {
   }, []);
 
   const handleClick = (id) => {
-    cardFlipSound.play();
+    if (!isMuted) {
+      cardFlipSound.play();
+    }
 
     setIsFlipping(true);
 
@@ -104,6 +106,13 @@ export default function App() {
 
         if (newScore > highScore) {
           setHighScore(newScore);
+        }
+
+        // win condition
+        if (newScore === 10) {
+          alert("You win!");
+          setScore(0);
+          setClicked([]);
         }
       }
       shuffleCards();
@@ -144,7 +153,7 @@ export default function App() {
         </main>
       </div>
 
-      <audio ref={audioRef} src={bgMusic} preload="auto" />
+      <audio ref={audioRef} src={bgm} preload="auto" />
 
       <div className="btn-toggle-music" onClick={toggleMute}>
         {isMuted ? <img src={musicOff} /> : <img src={musicOn} />}
